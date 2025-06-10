@@ -17,7 +17,7 @@ placeholders = [999.9, 9999.9, 999.99, 99.99, 9999, 99.9]
 for col in numeric_cols:
     for val in placeholders:
         df[col] = df[col].replace(val, np.nan)
-print(df['DATE'])
+
 
 def avg_temperature_2024():
     sum = 0
@@ -64,5 +64,29 @@ df['Month'] = df['DATE'].dt.to_period('M')
 monthly_summary = df.groupby('Month')[['Heatwave', 'Drought', 'HeavyRain', 'Storm']].sum()
 print(monthly_summary)
 
+def plot_monthly_summary():
+    plt.figure(figsize=(12, 6))
+    sns.lineplot(data=monthly_summary, markers=True)
+    plt.title('Monthly Summary of Weather Events')
+    plt.xlabel('Month')
+    plt.ylabel('Number of Events')
+    plt.xticks(rotation=45)
+    plt.legend(title='Event Type')
+    plt.tight_layout()
+    plt.show()
+
+def plot_heatmap():
+    heatmap_data = df.pivot_table(index=df['DATE'].dt.month, columns=df['DATE'].dt.year, values='MAX', aggfunc='mean')
+    plt.figure(figsize=(12, 6))
+    sns.heatmap(heatmap_data, cmap='coolwarm', annot=True, fmt=".1f")
+    plt.title('Average Monthly Maximum Temperature Heatmap')
+    plt.xlabel('Year')
+    plt.ylabel('Month')
+    plt.show()
+
+monthly_summary.index = monthly_summary.index.astype(str)
+print(monthly_summary.dtypes)
+plot_monthly_summary()
+plot_heatmap()
 
 
