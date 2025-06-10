@@ -64,6 +64,7 @@ df['Month'] = df['DATE'].dt.to_period('M')
 monthly_summary = df.groupby('Month')[['Heatwave', 'Drought', 'HeavyRain', 'Storm']].sum()
 print(monthly_summary)
 
+#multiline graph for all the extremities over the months
 def plot_monthly_summary():
     plt.figure(figsize=(12, 6))
     sns.lineplot(data=monthly_summary, markers=True)
@@ -75,6 +76,7 @@ def plot_monthly_summary():
     plt.tight_layout()
     plt.show()
 
+#heatmap for temperature over the months
 def plot_heatmap():
     heatmap_data = df.pivot_table(index=df['DATE'].dt.month, columns=df['DATE'].dt.year, values='MAX', aggfunc='mean')
     plt.figure(figsize=(12, 6))
